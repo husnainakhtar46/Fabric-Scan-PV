@@ -118,7 +118,7 @@ export default function PrintPage() {
               </div>
               <div className="glass p-3 text-center" style={{ borderColor: 'var(--bg-hover)' }}>
                 <p className="font-mono text-sm font-bold" style={{ color: 'var(--green-primary)' }}>10:</p>
-                <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>Next 8 from #10</p>
+                <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>All from #10</p>
               </div>
             </div>
 

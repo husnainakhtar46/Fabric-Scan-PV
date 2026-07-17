@@ -12,7 +12,7 @@ function isAuthenticated(authHeader: string | null, authParam: string | null): b
  * Parses Sr# range strings like:
  *   "1,4,5,6"   → [1, 4, 5, 6]
  *   "1:8"        → range 1–8
- *   "10:"        → range 10–17 (next 8)
+ *   "10:"        → range 10 onwards
  */
 function parseRange(input: string): { type: 'list'; nums: number[] } | { type: 'range'; start: number; count: number } {
   const trimmed = input.trim();
@@ -21,7 +21,7 @@ function parseRange(input: string): { type: 'list'; nums: number[] } | { type: '
     const [startStr, endStr] = trimmed.split(':');
     const start = parseInt(startStr.trim(), 10);
     if (endStr.trim() === '') {
-      return { type: 'range', start, count: 8 };
+      return { type: 'range', start, count: Infinity };
     }
     const end = parseInt(endStr.trim(), 10);
     return { type: 'range', start, count: end - start + 1 };
