@@ -19,11 +19,18 @@ export async function GET(request: Request) {
   }
 
   const includePrivate = isAuthenticated(authHeader, authParam);
-  const results = await searchStyles(query, includePrivate);
-
-  return NextResponse.json({
-    data: results,
-    count: results.length,
-    isTeamView: includePrivate,
-  });
+  try {
+    const results = await searchStyles(query, includePrivate);
+    return NextResponse.json({
+      data: results,
+      count: results.length,
+      isTeamView: includePrivate,
+    });
+  } catch (err: any) {
+    console.error("GOOGLE SHEETS CONNECTION ERROR:", err.message || err);
+    return NextResponse.json({ 
+      error: "Google Sheets Connection Error", 
+      details: err.message || String(err) 
+    }, { status: 500 });
+  }
 }

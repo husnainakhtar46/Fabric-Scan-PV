@@ -19,14 +19,20 @@ export async function GET(request: Request) {
   }
 
   const includePrivate = isAuthenticated(authHeader, authParam);
-  const garment = await getStyleByRef(styleRef, includePrivate);
-
-  if (!garment) {
-    return NextResponse.json({ error: 'Style not found', styleRef }, { status: 404 });
+  try {
+    const garment = await getStyleByRef(styleRef, includePrivate);
+    if (!garment) {
+      return NextResponse.json({ error: 'Style not found', styleRef }, { status: 404 });
+    }
+    return NextResponse.json({
+      data: garment,
+      isTeamView: includePrivate,
+    });
+  } catch (err: any) {
+    console.error("GOOGLE SHEETS CONNECTION ERROR (STYLE):", err.message || err);
+    return NextResponse.json({ 
+      error: "Google Sheets Connection Error", 
+      details: err.message || String(err) 
+    }, { status: 500 });
   }
-
-  return NextResponse.json({
-    data: garment,
-    isTeamView: includePrivate,
-  });
 }
