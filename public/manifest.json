@@ -1,0 +1,13 @@
+{
+  "name": "Fabric Library",
+  "short_name": "FabricLib",
+  "description": "Garment collection catalog",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0d1117",
+  "theme_color": "#53A65C",
+  "orientation": "portrait",
+  "icons": [
+    { "src": "/logo.svg", "sizes": "512x512", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
