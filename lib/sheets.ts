@@ -61,10 +61,17 @@ export type Garment = GarmentPublic | GarmentFull;
 // GOOGLE SHEETS CLIENT  (server-side only — uses .env secrets)
 // ============================================================
 async function getSheets() {
+  const rawKey = process.env.GOOGLE_PRIVATE_KEY ?? '';
+  // Strip any accidental leading/trailing quotes and replace escaped newlines
+  const formattedKey = rawKey
+    .replace(/^["']/, '')
+    .replace(/["']$/, '')
+    .replace(/\\n/g, '\n');
+
   const auth = new google.auth.GoogleAuth({
     credentials: {
       client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-      private_key: (process.env.GOOGLE_PRIVATE_KEY ?? '').replace(/\\n/g, '\n'),
+      private_key: formattedKey,
     },
     scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
   });
