@@ -83,10 +83,7 @@ export default function SearchDashboard({ teamPin }: SearchDashboardProps) {
             exit={{ opacity: 0 }}
             className="text-center py-16"
           >
-            <div className="w-16 h-16 rounded-2xl mx-auto mb-4 flex items-center justify-center"
-              style={{ background: 'var(--bg-elevated)', border: '1px solid var(--bg-hover)' }}>
-              <Search size={24} style={{ color: 'var(--text-muted)' }} />
-            </div>
+            <Search size={28} className="mx-auto mb-4" style={{ color: 'var(--text-muted)' }} />
             <p className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>
               Search the collection
             </p>

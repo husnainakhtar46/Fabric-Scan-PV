@@ -39,25 +39,33 @@ export default function HomePage() {
       {isMobile && (
         <div className="max-w-lg mx-auto px-4 pt-8 pb-24">
           {/* Tab switcher */}
-          <div className="flex rounded-xl p-1 mb-8"
-            style={{ background: 'var(--bg-elevated)', border: '1px solid var(--bg-hover)' }}>
-            {[
-              { key: 'scanner',   label: 'Scanner',  Icon: QrCode },
-              { key: 'dashboard', label: 'Search',   Icon: Smartphone },
-            ].map(({ key, label, Icon }) => (
-              <button
-                key={key}
-                onClick={() => setActiveTab(key as 'scanner' | 'dashboard')}
-                className="flex-1 flex items-center justify-center gap-2 py-3 rounded-lg text-sm font-medium transition-all"
-                style={{
-                  background: activeTab === key ? 'var(--gradient-green)' : 'transparent',
-                  color:      activeTab === key ? 'white' : 'var(--text-muted)',
-                  boxShadow:  activeTab === key ? 'var(--shadow-green)' : 'none',
-                }}
-              >
-                <Icon size={14} /> {label}
-              </button>
-            ))}
+          <div className="flex justify-center mb-8" style={{ marginTop: '1.25rem' }}>
+            <div
+              className="flex p-1 gap-1"
+              style={{ background: 'var(--bg-elevated)', border: '1px solid var(--bg-hover)', borderRadius: '50px' }}
+            >
+              {[
+                { key: 'scanner',   label: 'Scanner',  Icon: QrCode },
+                { key: 'dashboard', label: 'Search',   Icon: Smartphone },
+              ].map(({ key, label, Icon }) => (
+                <button
+                  key={key}
+                  onClick={() => setActiveTab(key as 'scanner' | 'dashboard')}
+                  className="flex items-center gap-2 text-sm font-medium transition-all"
+                  style={{
+                    padding: '8px 20px',
+                    borderRadius: '50px',
+                    background: activeTab === key ? 'var(--gradient-green)' : 'transparent',
+                    color:      activeTab === key ? 'white' : 'var(--text-muted)',
+                    boxShadow:  activeTab === key ? 'var(--shadow-green)' : 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                  }}
+                >
+                  <Icon size={13} /> {label}
+                </button>
+              ))}
+            </div>
           </div>
 
           <motion.div
@@ -65,6 +73,7 @@ export default function HomePage() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.2 }}
+            style={{ marginTop: '1.25rem' }}
           >
             {activeTab === 'scanner'
               ? <QrScanner />
@@ -76,9 +85,9 @@ export default function HomePage() {
 
       {/* ── DESKTOP LAYOUT ── */}
       {!isMobile && (
-        <div className="max-w-5xl mx-auto px-8 pt-10 pb-16">
+        <div className="mx-auto px-8 pt-10 pb-16" style={{ maxWidth: '1024px' }}>
 
-          {/* Team View banner — only visible when unlocked */}
+          {/* Team View banner */}
           {teamPin && (
             <motion.div
               initial={{ opacity: 0, y: -8 }}
@@ -89,7 +98,7 @@ export default function HomePage() {
               <div className="flex items-center gap-2 text-sm" style={{ color: 'var(--green-primary)' }}>
                 <Unlock size={14} />
                 <span className="font-semibold">Team View active</span>
-                <span className="hidden sm:inline" style={{ color: 'var(--text-muted)' }}>
+                <span style={{ color: 'var(--text-muted)' }}>
                   — pricing, notes &amp; event fields are visible
                 </span>
               </div>
@@ -99,51 +108,76 @@ export default function HomePage() {
             </motion.div>
           )}
 
-          {/* Search panel — full width, generous spacing */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.05 }}
-            className="glass p-8"
-          >
-            <div className="max-w-3xl mx-auto w-full">
-              <div className="flex items-center justify-between mb-7">
-                <div>
-                  <h1 className="text-2xl font-bold" style={{ fontFamily: 'Outfit, sans-serif' }}>
-                    Garment Search
-                  </h1>
-                  <p className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>
-                    Search by Style Ref, name, color, fabric code or composition
-                  </p>
-                </div>
-                <span className="badge" style={{
-                  background: teamPin ? 'rgba(83,166,92,0.15)' : 'var(--bg-elevated)',
-                  color:      teamPin ? 'var(--green-primary)' : 'var(--text-muted)',
-                  border:     `1px solid ${teamPin ? 'rgba(83,166,92,0.3)' : 'var(--bg-hover)'}`,
-                }}>
-                  <Monitor size={10} />
-                  {teamPin ? 'Team View' : 'Buyer View'}
-                </span>
-              </div>
-
-              <SearchDashboard teamPin={teamPin} />
+          {/* Tab switcher */}
+          <div className="flex justify-center" style={{ marginTop: '1.5rem' }}>
+            <div
+              className="flex p-1 gap-1"
+              style={{ background: 'var(--bg-elevated)', border: '1px solid var(--bg-hover)', borderRadius: '50px' }}
+            >
+              {[
+                { key: 'scanner',   label: 'QR Scanner', Icon: QrCode },
+                { key: 'dashboard', label: 'Search',      Icon: Monitor },
+              ].map(({ key, label, Icon }) => (
+                <button
+                  key={key}
+                  onClick={() => setActiveTab(key as 'scanner' | 'dashboard')}
+                  className="flex items-center gap-2 text-sm font-medium transition-all"
+                  style={{
+                    padding: '9px 24px',
+                    borderRadius: '50px',
+                    background: activeTab === key ? 'var(--gradient-green)' : 'transparent',
+                    color:      activeTab === key ? 'white' : 'var(--text-muted)',
+                    boxShadow:  activeTab === key ? 'var(--shadow-green)' : 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                  }}
+                >
+                  <Icon size={14} /> {label}
+                </button>
+              ))}
             </div>
+          </div>
+
+          {/* Tab content */}
+          <motion.div
+            key={activeTab}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.2 }}
+            style={{ marginTop: '1.25rem' }}
+          >
+            {activeTab === 'scanner' ? (
+              <div className="glass" style={{ padding: '2rem 10%' }}>
+                <QrScanner />
+              </div>
+            ) : (
+              <div className="glass" style={{ padding: '2rem 10%' }}>
+                <div className="flex items-center justify-between mb-7">
+                  <div>
+                    <h1 className="text-2xl font-bold" style={{ fontFamily: 'Outfit, sans-serif' }}>
+                      Garment Search
+                    </h1>
+                    <p className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>
+                      Search by Style Ref, name, color, fabric code or composition
+                    </p>
+                  </div>
+                  <span className="badge" style={{
+                    background: teamPin ? 'rgba(83,166,92,0.15)' : 'var(--bg-elevated)',
+                    color:      teamPin ? 'var(--green-primary)' : 'var(--text-muted)',
+                    border:     `1px solid ${teamPin ? 'rgba(83,166,92,0.3)' : 'var(--bg-hover)'}`,
+                  }}>
+                    <Monitor size={10} />
+                    {teamPin ? 'Team View' : 'Buyer View'}
+                  </span>
+                </div>
+                <SearchDashboard teamPin={teamPin} />
+              </div>
+            )}
           </motion.div>
 
-          {/* Subtle hint for buyers */}
-          {!teamPin && (
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.3 }}
-              className="text-center text-xs mt-5"
-              style={{ color: 'var(--text-muted)' }}
-            >
-              Team member? Tap the logo <strong>3×</strong> to unlock Team View with pricing &amp; private notes.
-            </motion.p>
-          )}
         </div>
       )}
+
     </div>
   );
 }

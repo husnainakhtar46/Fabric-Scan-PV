@@ -67,6 +67,7 @@ export default function GarmentCard({ garment, isTeamView }: GarmentCardProps) {
         variants={itemVariants}
         onClick={() => router.back()}
         className="btn-ghost py-2 px-3 text-sm"
+        style={{ marginTop: '1rem', marginBottom: '0.5rem', display: 'inline-flex' }}
       >
         <ArrowLeft size={14} /> Back
       </motion.button>
@@ -193,10 +194,10 @@ export default function GarmentCard({ garment, isTeamView }: GarmentCardProps) {
       {!isTeamView && (
         <motion.div variants={itemVariants}
           className="flex items-center gap-2 p-3 rounded-xl"
-          style={{ background: 'var(--bg-elevated)', border: '1px dashed var(--bg-hover)' }}>
+          style={{ background: 'var(--bg-elevated)', border: '1px dashed var(--bg-hover)', marginTop: '1rem', marginBottom: '1rem' }}>
           <ShieldOff size={14} style={{ color: 'var(--text-muted)' }} />
           <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
-            Pricing and private notes are available in Team View only.
+            Team View Only
           </p>
         </motion.div>
       )}

@@ -389,8 +389,7 @@ h1, h2, h3, h4, h5, h6 {
 .field-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1px;
-  background: var(--bg-hover);
+  gap: 8px;
   border-radius: var(--radius-md);
   overflow: hidden;
 }
@@ -398,6 +397,8 @@ h1, h2, h3, h4, h5, h6 {
 .field-cell {
   background: var(--bg-card);
   padding: 14px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--bg-hover);
   transition: background 0.15s ease;
 }
 
