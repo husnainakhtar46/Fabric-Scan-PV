@@ -76,7 +76,7 @@ export default function HomePage() {
 
       {/* ── DESKTOP LAYOUT ── */}
       {!isMobile && (
-        <div className="max-w-5xl mx-auto px-8 pt-10 pb-16">
+        <div className="max-w-3xl mx-auto px-8 pt-10 pb-16">
 
           {/* Team View banner — only visible when unlocked */}
           {teamPin && (
@@ -104,7 +104,7 @@ export default function HomePage() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.05 }}
-            className="glass p-8"
+            className="glass p-8 md:px-12 md:py-10"
           >
             <div className="flex items-center justify-between mb-7">
               <div>
