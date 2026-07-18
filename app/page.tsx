@@ -76,7 +76,7 @@ export default function HomePage() {
 
       {/* ── DESKTOP LAYOUT ── */}
       {!isMobile && (
-        <div className="max-w-3xl mx-auto px-8 pt-10 pb-16">
+        <div className="max-w-5xl mx-auto px-8 pt-10 pb-16">
 
           {/* Team View banner — only visible when unlocked */}
           {teamPin && (
@@ -104,28 +104,30 @@ export default function HomePage() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.05 }}
-            className="glass p-8 md:px-12 md:py-10"
+            className="glass p-8"
           >
-            <div className="flex items-center justify-between mb-7">
-              <div>
-                <h1 className="text-2xl font-bold" style={{ fontFamily: 'Outfit, sans-serif' }}>
-                  Garment Search
-                </h1>
-                <p className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>
-                  Search by Style Ref, name, color, fabric code or composition
-                </p>
+            <div className="max-w-3xl mx-auto w-full">
+              <div className="flex items-center justify-between mb-7">
+                <div>
+                  <h1 className="text-2xl font-bold" style={{ fontFamily: 'Outfit, sans-serif' }}>
+                    Garment Search
+                  </h1>
+                  <p className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>
+                    Search by Style Ref, name, color, fabric code or composition
+                  </p>
+                </div>
+                <span className="badge" style={{
+                  background: teamPin ? 'rgba(83,166,92,0.15)' : 'var(--bg-elevated)',
+                  color:      teamPin ? 'var(--green-primary)' : 'var(--text-muted)',
+                  border:     `1px solid ${teamPin ? 'rgba(83,166,92,0.3)' : 'var(--bg-hover)'}`,
+                }}>
+                  <Monitor size={10} />
+                  {teamPin ? 'Team View' : 'Buyer View'}
+                </span>
               </div>
-              <span className="badge" style={{
-                background: teamPin ? 'rgba(83,166,92,0.15)' : 'var(--bg-elevated)',
-                color:      teamPin ? 'var(--green-primary)' : 'var(--text-muted)',
-                border:     `1px solid ${teamPin ? 'rgba(83,166,92,0.3)' : 'var(--bg-hover)'}`,
-              }}>
-                <Monitor size={10} />
-                {teamPin ? 'Team View' : 'Buyer View'}
-              </span>
-            </div>
 
-            <SearchDashboard teamPin={teamPin} />
+              <SearchDashboard teamPin={teamPin} />
+            </div>
           </motion.div>
 
           {/* Subtle hint for buyers */}
