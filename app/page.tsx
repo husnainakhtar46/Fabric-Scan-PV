@@ -87,21 +87,13 @@ export default function HomePage() {
       {!isMobile && (
         <div className="mx-auto px-8 pt-10 pb-16" style={{ maxWidth: '1024px' }}>
 
-          {/* Team View banner */}
+          {/* Team View QR Generator */}
           {teamPin && (
             <motion.div
               initial={{ opacity: 0, y: -8 }}
               animate={{ opacity: 1, y: 0 }}
-              className="flex items-center justify-between mb-6 px-5 py-3 rounded-xl"
-              style={{ background: 'rgba(83,166,92,0.1)', border: '1px solid rgba(83,166,92,0.25)' }}
+              className="flex justify-end mt-4 mb-6"
             >
-              <div className="flex items-center gap-2 text-sm" style={{ color: 'var(--green-primary)' }}>
-                <Unlock size={14} />
-                <span className="font-semibold">Team View active</span>
-                <span style={{ color: 'var(--text-muted)' }}>
-                  — pricing, notes &amp; event fields are visible
-                </span>
-              </div>
               <a href="/print" className="btn-primary py-2 px-4 text-xs">
                 <QrCode size={12} /> QR Generator
               </a>
