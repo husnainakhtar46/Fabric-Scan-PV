@@ -36,7 +36,11 @@ export default function PrintPage() {
   const [error, setError]           = useState('');
   const printAreaRef                = useRef<HTMLDivElement>(null);
 
-  const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
+  // Use the configured production URL so QR codes work when scanned by native
+  // phone cameras (Chrome/Safari) — not just from within the app.
+  // Falls back to window.location.origin for local dev if env var is not set.
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, '')
+    || (typeof window !== 'undefined' ? window.location.origin : '');
 
   const handleGenerate = async () => {
     if (!rangeInput.trim()) { setError('Please enter a Sr# range.'); return; }
