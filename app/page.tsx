@@ -149,9 +149,7 @@ export default function HomePage() {
                     <h1 className="text-2xl font-bold" style={{ fontFamily: 'Outfit, sans-serif' }}>
                       Garment Search
                     </h1>
-                    <p className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>
-                      Search by Style Ref, name, color, fabric code or composition
-                    </p>
+                    
                   </div>
                   <span className="badge" style={{
                     background: teamPin ? 'rgba(83,166,92,0.15)' : 'var(--bg-elevated)',
