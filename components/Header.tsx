@@ -4,10 +4,74 @@ import { useCallback, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Lock, Unlock, X, Eye, EyeOff } from 'lucide-react';
+import { useTheme } from '@/lib/ThemeContext';
 
 interface HeaderProps {
   isTeamView: boolean;
   onAuthChange: (pin: string | null) => void;
+}
+
+/* ── Inline Theme Toggle Pill ──────────────────────────────── */
+function ThemeToggle() {
+  const { theme, toggleTheme } = useTheme();
+  const isDark = theme === 'dark';
+
+  return (
+    <button
+      id="theme-toggle"
+      onClick={toggleTheme}
+      aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+      title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '6px',
+        padding: '4px 8px 4px 8px',
+        borderRadius: '999px',
+        border: '1px solid var(--glass-border-hover)',
+        background: 'var(--bg-elevated)',
+        cursor: 'pointer',
+        position: 'relative',
+        transition: 'all 0.2s ease',
+        userSelect: 'none',
+      }}
+    >
+      {/* Sun icon */}
+      <span style={{ fontSize: '13px', lineHeight: 1, opacity: isDark ? 0.35 : 1, transition: 'opacity 0.2s' }}>☀️</span>
+
+      {/* Sliding pill thumb */}
+      <span
+        style={{
+          position: 'relative',
+          display: 'inline-block',
+          width: '32px',
+          height: '18px',
+          borderRadius: '999px',
+          background: isDark ? 'var(--green-dark)' : 'var(--green-primary)',
+          boxShadow: '0 0 6px rgba(83,166,92,0.4)',
+          transition: 'background 0.2s',
+          flexShrink: 0,
+        }}
+      >
+        <span
+          style={{
+            position: 'absolute',
+            top: '2px',
+            left: isDark ? '16px' : '2px',
+            width: '14px',
+            height: '14px',
+            borderRadius: '50%',
+            background: 'white',
+            transition: 'left 0.2s cubic-bezier(0.34,1.56,0.64,1)',
+            boxShadow: '0 1px 3px rgba(0,0,0,0.3)',
+          }}
+        />
+      </span>
+
+      {/* Moon icon */}
+      <span style={{ fontSize: '13px', lineHeight: 1, opacity: isDark ? 1 : 0.35, transition: 'opacity 0.2s' }}>🌙</span>
+    </button>
+  );
 }
 
 export default function Header({ isTeamView, onAuthChange }: HeaderProps) {
@@ -85,6 +149,19 @@ export default function Header({ isTeamView, onAuthChange }: HeaderProps) {
 
           {/* Right side */}
           <div className="flex items-center gap-3">
+            {/* Nav links */}
+            <nav className="hidden md:flex items-center gap-2">
+              <button onClick={() => router.push('/')} className="btn-ghost py-2 px-3 text-sm">
+                Dashboard
+              </button>
+              {isTeamView && (
+                <button onClick={() => router.push('/print')} className="btn-ghost py-2 px-3 text-sm">
+                  QR Generator
+                </button>
+              )}
+            </nav>
+
+            {/* Team View badge — shown to the left of the theme toggle */}
             {isTeamView && (
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
@@ -96,16 +173,8 @@ export default function Header({ isTeamView, onAuthChange }: HeaderProps) {
               </motion.div>
             )}
 
-            <nav className="hidden md:flex items-center gap-2">
-              <button onClick={() => router.push('/')} className="btn-ghost py-2 px-3 text-sm">
-                Dashboard
-              </button>
-              {isTeamView && (
-                <button onClick={() => router.push('/print')} className="btn-ghost py-2 px-3 text-sm">
-                  QR Generator
-                </button>
-              )}
-            </nav>
+            {/* Dark / Light mode pill toggle */}
+            <ThemeToggle />
           </div>
         </div>
       </header>
