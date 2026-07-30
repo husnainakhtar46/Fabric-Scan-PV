@@ -41,7 +41,7 @@ export default function SearchDashboard({ teamPin }: SearchDashboardProps) {
     const val = e.target.value;
     setQuery(val);
     if (debounceRef.current) clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(() => doSearch(val), 350);
+    debounceRef.current = setTimeout(() => doSearch(val), 600);
   };
 
   const clearSearch = () => { setQuery(''); setResults([]); setSearched(false); };
