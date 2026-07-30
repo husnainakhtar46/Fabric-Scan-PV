@@ -1,7 +1,11 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { ArrowLeft, Tag, Palette, Scale, Droplets, Layers, Repeat, Hash, Ruler, User, DollarSign, StickyNote, Calendar, ShieldCheck, ShieldOff } from 'lucide-react';
+import {
+  ArrowLeft, Tag, Palette, Scale, Droplets, Layers, Repeat, Hash,
+  Ruler, User, DollarSign, StickyNote, Calendar, ShieldCheck, ShieldOff,
+  Shirt, Scissors, Waves, Package, MapPin, FlaskConical, Wind, Briefcase, Factory, PieChart,
+} from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import type { GarmentPublic, GarmentFull } from '@/lib/sheets';
 
@@ -78,13 +82,13 @@ export default function GarmentCard({ garment, isTeamView }: GarmentCardProps) {
         <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full"
           style={{ background: 'radial-gradient(circle, rgba(83,166,92,0.12) 0%, transparent 70%)' }} />
 
-        {/* Style Ref badge row */}
+        {/* Article Code (formNo) badge row */}
         <div className="flex items-start justify-between mb-4 flex-wrap gap-2">
           <div>
             <div className="flex items-center gap-2 mb-1">
               <span className="badge badge-green">
                 <Tag size={9} />
-                {garment.styleRef}
+                {garment.formNo}
               </span>
               {garment.srNum && (
                 <span className="badge badge-gray">Sr# {garment.srNum}</span>
@@ -103,7 +107,7 @@ export default function GarmentCard({ garment, isTeamView }: GarmentCardProps) {
           </div>
         </div>
 
-        {/* Color + Gender row */}
+        {/* Color + Gender + Fit row */}
         <div className="flex flex-wrap gap-2">
           {garment.colorShade && (
             <span className="badge badge-gray">
@@ -119,27 +123,29 @@ export default function GarmentCard({ garment, isTeamView }: GarmentCardProps) {
               <User size={9} /> {garment.gender}
             </span>
           )}
-          {garment.size && (
+          {garment.fit && (
             <span className="badge badge-gray">
-              <Ruler size={9} /> Size {garment.size}
+              <Shirt size={9} /> {garment.fit}
             </span>
           )}
         </div>
       </motion.div>
 
-      {/* Fabric Details Section */}
+      {/* Public Details Section (Buyer-visible) */}
       <motion.div variants={itemVariants}>
         <p className="label px-1 mb-2" style={{ color: 'var(--text-muted)' }}>Fabric Details</p>
         <div className="field-grid">
-          <Field label="Fabric Code"      value={garment.fabricCode}     icon={<Hash size={11} />} />
+          <Field label="Article Code"     value={garment.formNo}         icon={<Hash size={11} />} />
+          <Field label="Style"            value={garment.style}          icon={<Tag size={11} />} />
+          <Field label="Color / Shade"    value={garment.colorShade}     icon={<Palette size={11} />} />
           <Field label="B1 Fabric Code"   value={garment.b1FabricCode}   icon={<Hash size={11} />} />
           <Field label="Composition"      value={garment.composition}    icon={<Layers size={11} />} />
+          <Field label="Weave / Fabric"   value={garment.weave}          icon={<Scissors size={11} />} />
           <Field label="Weight (AW)"      value={garment.weightAw}       icon={<Scale size={11} />} />
-          <Field label="Shrinkage Warp"   value={garment.shrinkageWarp}  icon={<Droplets size={11} />} />
-          <Field label="Shrinkage Weft"   value={garment.shrinkageWeft}  icon={<Droplets size={11} />} />
           <Field label="Colors in Family" value={garment.colorsInFamily} icon={<Palette size={11} />} />
           <Field label="No. of Washes"    value={garment.numWashes}      icon={<Repeat size={11} />} />
-          <Field label="Form No."         value={garment.formNo}         icon={<Hash size={11} />} />
+          <Field label="Gender"           value={garment.gender}         icon={<User size={11} />} />
+          <Field label="Fit"              value={garment.fit}            icon={<Shirt size={11} />} />
         </div>
       </motion.div>
 
@@ -156,6 +162,23 @@ export default function GarmentCard({ garment, isTeamView }: GarmentCardProps) {
           </div>
           <div className="glass p-1" style={{ border: '1px solid rgba(83,166,92,0.3)' }}>
             <div className="field-grid" style={{ borderRadius: 'calc(var(--radius-md) - 4px)', overflow: 'hidden' }}>
+
+              {/* 1. Fabric Code */}
+              <Field label="Fabric Code"          value={full.fabricCode}       icon={<Hash size={11} />} />
+
+              {/* 2. Shrinkage Warp */}
+              <Field label="Shrinkage Warp"        value={full.shrinkageWarp}    icon={<Droplets size={11} />} />
+
+              {/* 3. Shrinkage Weft */}
+              <Field label="Shrinkage Weft"        value={full.shrinkageWeft}    icon={<Droplets size={11} />} />
+
+              {/* 4. Stretch & Recovery */}
+              <Field label="Stretch & Recovery"    value={full.stretchRecovery}  icon={<Wind size={11} />} />
+
+              {/* 5. Fabric Cuttable Width */}
+              <Field label="Fabric Cuttable Width" value={full.fabricWidth}      icon={<Ruler size={11} />} />
+
+              {/* 6. Fabric Price */}
               {full.fabricPrice && (
                 <div className="field-cell">
                   <div className="flex items-center gap-1.5 mb-1">
@@ -167,15 +190,46 @@ export default function GarmentCard({ garment, isTeamView }: GarmentCardProps) {
                   </p>
                 </div>
               )}
-              {full.notes && (
-                <div className="field-cell" style={{ gridColumn: !full.fabricPrice ? '1 / -1' : 'auto' }}>
+
+              {/* 7. Suppliers and Customers */}
+              <Field label="Customer"              value={full.customer}         icon={<Briefcase size={11} />} />
+              <Field label="Garment Supplier"      value={full.garmentSupplier}  icon={<Factory size={11} />} />
+              <Field label="Fabric Supplier"       value={full.fabricSupplier}   icon={<Package size={11} />} />
+
+              {/* 8. Idea Garment Price */}
+              {full.ideaGarmentPrice && (
+                <div className="field-cell">
                   <div className="flex items-center gap-1.5 mb-1">
-                    <StickyNote size={11} style={{ color: 'var(--text-muted)' }} />
-                    <span className="label">Notes</span>
+                    <DollarSign size={11} style={{ color: 'var(--green-primary)' }} />
+                    <span className="label">Idea Garment Price</span>
                   </div>
-                  <p className="value">{full.notes}</p>
+                  <p className="value text-lg font-bold" style={{ color: 'var(--green-primary)' }}>
+                    ${full.ideaGarmentPrice}
+                  </p>
                 </div>
               )}
+
+              {/* Garment Fabric Consumption */}
+              <Field label="Garment Fabric Consumption" value={full.garmentFabricConsumption} icon={<PieChart size={11} />} />
+
+              {/* 9. Target Season */}
+              <Field label="Target Season"         value={full.targetSeason}     icon={<Calendar size={11} />} />
+
+              {/* 10. Fabric MOQ */}
+              <Field label="Fabric MOQ"            value={full.fabricMoq}        icon={<FlaskConical size={11} />} />
+
+              {/* 11. Physical Sample Location — wide */}
+              {full.sampleLocation && (
+                <div className="field-cell" style={{ gridColumn: '1 / -1' }}>
+                  <div className="flex items-center gap-1.5 mb-1">
+                    <MapPin size={11} style={{ color: 'var(--text-muted)' }} />
+                    <span className="label">Physical Sample Location</span>
+                  </div>
+                  <p className="value">{full.sampleLocation}</p>
+                </div>
+              )}
+
+              {/* 12. Event — wide */}
               {full.event && (
                 <div className="field-cell" style={{ gridColumn: '1 / -1' }}>
                   <div className="flex items-center gap-1.5 mb-1">
@@ -185,6 +239,18 @@ export default function GarmentCard({ garment, isTeamView }: GarmentCardProps) {
                   <p className="value">{full.event}</p>
                 </div>
               )}
+
+              {/* 13. Notes — wide */}
+              {full.notes && (
+                <div className="field-cell" style={{ gridColumn: '1 / -1' }}>
+                  <div className="flex items-center gap-1.5 mb-1">
+                    <StickyNote size={11} style={{ color: 'var(--text-muted)' }} />
+                    <span className="label">Notes</span>
+                  </div>
+                  <p className="value">{full.notes}</p>
+                </div>
+              )}
+
             </div>
           </div>
         </motion.div>

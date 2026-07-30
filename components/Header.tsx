@@ -103,18 +103,24 @@ export default function Header({ isTeamView, onAuthChange }: HeaderProps) {
 
   const handleSubmitPin = async () => {
     setError('');
-    const res = await fetch(`/api/style?styleRef=REF-000ALY&auth=${pin}`);
-    if (res.ok) {
-      const json = await res.json();
-      if (json.isTeamView) {
-        localStorage.setItem('team_pin', pin);
-        onAuthChange(pin);
-        setShowModal(false);
-        setPin('');
-      } else {
-        triggerError('Incorrect PIN. Try again.');
+    try {
+      const res = await fetch('/api/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pin }),
+      });
+      if (res.ok) {
+        const json = await res.json();
+        if (json.isTeamView) {
+          localStorage.setItem('team_pin', pin);
+          onAuthChange(pin);
+          setShowModal(false);
+          setPin('');
+          return;
+        }
       }
-    } else {
+      triggerError('Incorrect PIN. Try again.');
+    } catch {
       triggerError('Incorrect PIN. Try again.');
     }
   };
