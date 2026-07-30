@@ -1,4 +1,5 @@
 import { google } from 'googleapis';
+import { unstable_cache } from 'next/cache';
 
 // ============================================================
 // COLUMN INDEX MAPPING  (0-indexed, matches new CSV header)
@@ -106,23 +107,27 @@ async function getSheets() {
 }
 
 // ============================================================
-// FETCH ALL ROWS  (Next.js caches this for 60 s to avoid
-//   hammering the Sheets API during a busy fair day)
+// FETCH ALL ROWS  (Cached for 60s using Next.js unstable_cache
+//   so only 1 Sheets API call is made per minute, regardless
+//   of how many concurrent users are searching)
 // ============================================================
-async function fetchAllRows(): Promise<string[][]> {
+async function fetchAllRowsRaw(): Promise<string[][]> {
   const sheets  = await getSheets();
   const sheetId = process.env.SPREADSHEET_ID;
   const range   = process.env.SHEET_RANGE ?? 'Database!A2:AB'; // cols A–AB covers all 28 cols
 
-  const res = await sheets.spreadsheets.values.get(
-    { spreadsheetId: sheetId, range },
-    // Next.js fetch cache — refresh every 60 seconds
-    // @ts-ignore
-    { next: { revalidate: 60 } }
-  );
-
+  const res = await sheets.spreadsheets.values.get({ spreadsheetId: sheetId, range });
   return (res.data.values ?? []) as string[][];
 }
+
+// unstable_cache is the ONLY way to cache non-fetch async functions in Next.js.
+// The googleapis client does not use native fetch, so { next: { revalidate } }
+// on the googleapis call is silently ignored — this is the real cache.
+const fetchAllRows = unstable_cache(
+  async () => fetchAllRowsRaw(),
+  ['google-sheets-database'],
+  { revalidate: 60 }
+);
 
 // ============================================================
 // ROW → OBJECT
