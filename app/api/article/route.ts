@@ -10,19 +10,19 @@ function isAuthenticated(authHeader: string | null, authParam: string | null): b
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const styleRef = searchParams.get('styleRef');
+  const articleCode = searchParams.get('articleCode');
   const authParam = searchParams.get('auth');
   const authHeader = request.headers.get('authorization');
 
-  if (!styleRef) {
-    return NextResponse.json({ error: 'styleRef is required' }, { status: 400 });
+  if (!articleCode) {
+    return NextResponse.json({ error: 'articleCode is required' }, { status: 400 });
   }
 
   const includePrivate = isAuthenticated(authHeader, authParam);
   try {
-    const garment = await getStyleByRef(styleRef, includePrivate);
+    const garment = await getStyleByRef(articleCode, includePrivate);
     if (!garment) {
-      return NextResponse.json({ error: 'Style not found', styleRef }, { status: 404 });
+      return NextResponse.json({ error: 'Style not found', articleCode }, { status: 404 });
     }
     return NextResponse.json({
       data: garment,

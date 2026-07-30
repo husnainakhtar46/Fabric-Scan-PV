@@ -37,13 +37,13 @@ export default function QrScanner() {
         { fps: 10, qrbox: { width: 240, height: 240 } },
         (decodedText) => {
           // Extract Style Ref from URL or use raw value
-          let styleRef = decodedText;
+          let articleCode = decodedText;
           try {
             const url = new URL(decodedText);
             const parts = url.pathname.split('/');
-            const idx = parts.indexOf('style');
+            const idx = parts.indexOf('article');
             if (idx !== -1 && parts[idx + 1]) {
-              styleRef = decodeURIComponent(parts[idx + 1]);
+              articleCode = decodeURIComponent(parts[idx + 1]);
             }
           } catch {
             // Not a URL — use raw text as style ref
@@ -53,7 +53,7 @@ export default function QrScanner() {
           } catch (e) {
             // ignore
           }
-          router.push(`/style/${encodeURIComponent(styleRef)}`);
+          router.push(`/article/${encodeURIComponent(articleCode)}`);
         },
         () => {} // on frame error — silent
       );

@@ -56,7 +56,7 @@ export default function PrintPage() {
       if (data.length === 0) { setError('No styles found for that range.'); return; }
       setItems(data.map((g) => ({
         ...g,
-        qrUrl: `${baseUrl}/style/${encodeURIComponent(g.formNo)}`,
+        qrUrl: `${baseUrl}/article/${encodeURIComponent(g.articleCode)}`,
       })));
     } catch {
       setError('Network error. Please try again.');
@@ -181,7 +181,7 @@ export default function PrintPage() {
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 {items.map((item) => (
-                  <div key={item.formNo}
+                  <div key={item.articleCode}
                     className="glass p-3 flex flex-col items-center gap-2 text-center">
                     <div className="bg-white p-2 rounded-lg">
                       <QRCodeSVG
@@ -193,7 +193,7 @@ export default function PrintPage() {
                       />
                     </div>
                     <span className="badge badge-green text-xs">
-                      <Tag size={8} /> {item.formNo}
+                      <Tag size={8} /> {item.articleCode}
                     </span>
                     <p className="text-xs truncate w-full" style={{ color: 'var(--text-muted)' }}>
                       {item.style}
@@ -211,7 +211,7 @@ export default function PrintPage() {
         {pages.map((page, pi) => (
           <div key={pi} className="qr-print-grid" style={{ pageBreakAfter: pi < pages.length - 1 ? 'always' : 'auto' }}>
             {page.map((item) => (
-              <div key={item.formNo} className="qr-print-item">
+              <div key={item.articleCode} className="qr-print-item">
                 <QRCodeSVG
                   value={item.qrUrl}
                   size={180}
@@ -220,7 +220,7 @@ export default function PrintPage() {
                   fgColor="#000000"
                 />
                 <div className="qr-print-label">
-                  <div className="style-ref">{item.formNo}</div>
+                  <div className="style-ref">{item.articleCode}</div>
                   <div className="style-name">{item.style} · {item.colorShade}</div>
                 </div>
               </div>

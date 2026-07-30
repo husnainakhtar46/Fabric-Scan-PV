@@ -120,11 +120,11 @@ export default function SearchDashboard({ teamPin }: SearchDashboardProps) {
             </p>
             {results.map((g, i) => (
               <motion.button
-                key={g.formNo || g.srNum || i}
+                key={g.articleCode || g.srNum || i}
                 initial={{ opacity: 0, x: -12 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.04 }}
-                onClick={() => router.push(`/style/${encodeURIComponent(g.formNo)}`)}
+                onClick={() => router.push(`/article/${encodeURIComponent(g.articleCode)}`)}
                 className="glass glass-hover w-full text-left p-4 flex items-center gap-4 group"
                 style={{ background: 'var(--bg-card)' }}
               >
@@ -138,7 +138,7 @@ export default function SearchDashboard({ teamPin }: SearchDashboardProps) {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-0.5 flex-wrap">
                     <span className="badge badge-green text-xs">
-                      <Tag size={8} /> {g.formNo}
+                      <Tag size={8} /> {g.articleCode}
                     </span>
                     {g.gender && (
                       <span className="badge badge-gray text-xs">

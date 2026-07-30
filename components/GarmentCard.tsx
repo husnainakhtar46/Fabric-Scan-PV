@@ -82,13 +82,13 @@ export default function GarmentCard({ garment, isTeamView }: GarmentCardProps) {
         <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full"
           style={{ background: 'radial-gradient(circle, rgba(83,166,92,0.12) 0%, transparent 70%)' }} />
 
-        {/* Article Code (formNo) badge row */}
+        {/* Article Code (articleCode) badge row */}
         <div className="flex items-start justify-between mb-4 flex-wrap gap-2">
           <div>
             <div className="flex items-center gap-2 mb-1">
               <span className="badge badge-green">
                 <Tag size={9} />
-                {garment.formNo}
+                {garment.articleCode}
               </span>
               {garment.srNum && (
                 <span className="badge badge-gray">Sr# {garment.srNum}</span>
@@ -135,7 +135,7 @@ export default function GarmentCard({ garment, isTeamView }: GarmentCardProps) {
       <motion.div variants={itemVariants}>
         <p className="label px-1 mb-2" style={{ color: 'var(--text-muted)' }}>Fabric Details</p>
         <div className="field-grid">
-          <Field label="Article Code"     value={garment.formNo}         icon={<Hash size={11} />} />
+          <Field label="Article Code"     value={garment.articleCode}         icon={<Hash size={11} />} />
           <Field label="Style"            value={garment.style}          icon={<Tag size={11} />} />
           <Field label="Color / Shade"    value={garment.colorShade}     icon={<Palette size={11} />} />
           <Field label="B1 Fabric Code"   value={garment.b1FabricCode}   icon={<Hash size={11} />} />

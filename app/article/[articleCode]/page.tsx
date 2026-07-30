@@ -10,7 +10,7 @@ import type { GarmentPublic, GarmentFull } from '@/lib/sheets';
 
 export default function StylePage() {
   const params = useParams();
-  const styleRef = decodeURIComponent(params.styleRef as string);
+  const articleCode = decodeURIComponent(params.articleCode as string);
 
   const [garment, setGarment]   = useState<GarmentPublic | GarmentFull | null>(null);
   const [isTeamView, setIsTeamView] = useState(false);
@@ -23,7 +23,7 @@ export default function StylePage() {
     setError('');
     try {
       const authParam = pin ? `&auth=${pin}` : '';
-      const res = await fetch(`/api/style?styleRef=${encodeURIComponent(styleRef)}${authParam}`);
+      const res = await fetch(`/api/article?articleCode=${encodeURIComponent(articleCode)}${authParam}`);
       if (!res.ok) {
         const j = await res.json();
         setError(j.error || 'Style not found');
@@ -38,7 +38,7 @@ export default function StylePage() {
     } finally {
       setLoading(false);
     }
-  }, [styleRef]);
+  }, [articleCode]);
 
   useEffect(() => {
     const saved = localStorage.getItem('team_pin');
@@ -84,7 +84,7 @@ export default function StylePage() {
             Style Not Found
           </h2>
           <p className="text-sm mb-2" style={{ color: 'var(--text-muted)' }}>{error}</p>
-          <p className="text-xs font-mono mb-6 badge badge-gray mx-auto w-fit">{styleRef}</p>
+          <p className="text-xs font-mono mb-6 badge badge-gray mx-auto w-fit">{articleCode}</p>
           <a href="/" className="btn-primary mx-auto w-fit">← Back to Search</a>
         </motion.div>
       )}

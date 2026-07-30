@@ -16,7 +16,7 @@ import { google } from 'googleapis';
 // ============================================================
 const COL = {
   SR_NUM:             0,
-  ARTICLE_CODE:       1,  // formNo
+  ARTICLE_CODE:       1,  // articleCode
   STYLE:              2,
   COLOR_SHADE:        3,
   FABRIC_CODE:        4,   // ⚠️ PRIVATE
@@ -50,7 +50,7 @@ const COL = {
 // ============================================================
 export interface GarmentPublic {
   srNum:          string;
-  formNo:         string;  // Article Code (col 1)
+  articleCode:    string;  // Article Code (col 1)
   style:          string;
   colorShade:     string;
   b1FabricCode:   string;
@@ -130,7 +130,7 @@ async function fetchAllRows(): Promise<string[][]> {
 function toGarment(row: string[], includePrivate: boolean): Garment {
   const pub: GarmentPublic = {
     srNum:          String(row[COL.SR_NUM]          ?? ''),
-    formNo:         String(row[COL.ARTICLE_CODE]    ?? ''),
+    articleCode:    String(row[COL.ARTICLE_CODE]    ?? ''),
     style:          String(row[COL.STYLE]           ?? ''),
     colorShade:     String(row[COL.COLOR_SHADE]     ?? ''),
     b1FabricCode:   String(row[COL.B1_FABRIC_CODE]  ?? ''),
@@ -172,12 +172,12 @@ function toGarment(row: string[], includePrivate: boolean): Garment {
 
 /** Find one garment by its Article Code / Form No (e.g. "ART-0008") */
 export async function getStyleByRef(
-  formNo: string,
+  articleCode: string,
   includePrivate: boolean
 ): Promise<Garment | null> {
   const rows = await fetchAllRows();
   const row  = rows.find(
-    (r) => (r[COL.ARTICLE_CODE] ?? '').trim().toLowerCase() === formNo.trim().toLowerCase()
+    (r) => (r[COL.ARTICLE_CODE] ?? '').trim().toLowerCase() === articleCode.trim().toLowerCase()
   );
   return row ? toGarment(row, includePrivate) : null;
 }
