@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import type { GarmentPublic, GarmentFull } from '@/lib/sheets';
+import GarmentGallery from '@/components/GarmentGallery';
 
 interface GarmentCardProps {
   garment: GarmentPublic | GarmentFull;
@@ -130,6 +131,9 @@ export default function GarmentCard({ garment, isTeamView }: GarmentCardProps) {
           )}
         </div>
       </motion.div>
+
+      {/* Photo Gallery — hidden automatically if no Cloudinary images exist */}
+      <GarmentGallery articleCode={garment.articleCode} />
 
       {/* Public Details Section (Buyer-visible) */}
       <motion.div variants={itemVariants}>
