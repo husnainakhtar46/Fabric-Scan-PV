@@ -131,6 +131,7 @@ function Lightbox({ confirmed, lightbox, onClose, onPrev, onNext, onGoTo, articl
           sizes="90vw"
           style={{ objectFit: 'contain' }}
           priority
+          unoptimized
         />
       </motion.div>
 
@@ -246,6 +247,7 @@ export default function GarmentGallery({ articleCode }: GarmentGalleryProps) {
                 alt={`${articleCode} photo ${idx + 1}`}
                 fill sizes="110px"
                 style={{ objectFit: 'cover' }}
+                unoptimized
               />
             </motion.button>
           ))}
