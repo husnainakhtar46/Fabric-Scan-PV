@@ -4,7 +4,8 @@ import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { QrCode, Printer, Loader2, AlertCircle, Hash, ChevronRight, Tag, ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { QRCodeSVG } from 'qrcode.react';
+import { QRCodeSVG, QRCodeCanvas } from 'qrcode.react';
+import ExcelJS from 'exceljs';
 import Header from '@/components/Header';
 import type { GarmentPublic } from '@/lib/sheets';
 
@@ -66,6 +67,92 @@ export default function PrintPage() {
   };
 
   const handlePrint = () => window.print();
+
+  const handleExportExcel = async () => {
+    if (items.length === 0) return;
+    setLoading(true);
+
+    try {
+      const workbook = new ExcelJS.Workbook();
+      const worksheet = workbook.addWorksheet('QR Stickers');
+
+      // Set column widths (roughly 2.5 inches)
+      // Excel column width units are roughly number of characters. 25 is a good start.
+      worksheet.columns = [
+        { width: 35 },
+        { width: 35 },
+        { width: 35 }
+      ];
+
+      const canvases = document.querySelectorAll<HTMLCanvasElement>('[data-export-canvas] canvas');
+      const qrDataUrls: Record<string, string> = {};
+      items.forEach((item, i) => {
+        const c = canvases[i];
+        if (c) qrDataUrls[item.articleCode] = c.toDataURL('image/png');
+      });
+
+      let currentRow = 1;
+      
+      for (let i = 0; i < items.length; i += 3) {
+        // Set row height (roughly 3.5 inches -> ~250 points)
+        worksheet.getRow(currentRow).height = 200;
+
+        for (let j = 0; j < 3; j++) {
+          const itemIndex = i + j;
+          if (itemIndex >= items.length) break;
+          
+          const item = items[itemIndex];
+          const col = j + 1;
+
+          // Add image
+          if (qrDataUrls[item.articleCode]) {
+            const imageId = workbook.addImage({
+              base64: qrDataUrls[item.articleCode],
+              extension: 'png',
+            });
+            
+          // Add image to cell (centered horizontally, top vertically)
+            // col and row are 0-indexed in ext, but 1-indexed in getCell
+            worksheet.addImage(imageId, {
+              tl: { col: col - 1 + 0.1, row: currentRow - 1 + 0.1 },
+              ext: { width: 150, height: 150 }
+            });
+          }
+
+          // Add text below image (sits at the bottom of the cell)
+          const cell = worksheet.getCell(currentRow, col);
+          
+          cell.value = {
+            richText: [
+              { text: `${item.articleCode}\n`, font: { name: 'Arial', size: 16, bold: true, color: { argb: 'FF000000' } } },
+              { text: `${item.style} · ${item.colorShade}`, font: { name: 'Arial', size: 11, color: { argb: 'FF444444' } } }
+            ]
+          };
+          
+          // Align at the very bottom so it stays under the QR code
+          cell.alignment = { horizontal: 'center', vertical: 'bottom', wrapText: true };
+        }
+        currentRow++;
+      }
+
+      // Generate file and trigger download
+      const buffer = await workbook.xlsx.writeBuffer();
+      const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `QR_Stickers_${new Date().toISOString().split('T')[0]}.xlsx`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error('Error generating Excel', err);
+      setError('Failed to generate Excel file');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleAuthChange = (pin: string | null) => {
     setTeamPin(pin);
@@ -174,9 +261,14 @@ export default function PrintPage() {
                     ({pages.length} A4 page{pages.length !== 1 ? 's' : ''})
                   </span>
                 </p>
-                <button onClick={handlePrint} className="btn-primary">
-                  <Printer size={14} /> Print Now
-                </button>
+                <div className="flex gap-2">
+                  <button onClick={handlePrint} className="btn-primary">
+                    <Printer size={14} /> Print Now
+                  </button>
+                  <button onClick={handleExportExcel} disabled={loading} className="btn-primary" style={{ background: 'var(--blue-accent)', borderColor: 'var(--blue-accent)' }}>
+                    Export Excel
+                  </button>
+                </div>
               </div>
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -205,6 +297,17 @@ export default function PrintPage() {
           )}
         </motion.div>
       </div>
+
+      {/* Hidden canvases used by Excel export to extract QR data URLs */}
+      {items.length > 0 && (
+        <div style={{ position: 'absolute', left: '-9999px', top: 0, pointerEvents: 'none' }}>
+          {items.map((item) => (
+            <div key={item.articleCode} data-export-canvas="true">
+              <QRCodeCanvas value={item.qrUrl} size={160} level="M" bgColor="#ffffff" fgColor="#000000" />
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* ── PRINT AREA (hidden on screen, shown on print) ── */}
       <div ref={printAreaRef} className="print-only" style={{ display: 'none' }}>

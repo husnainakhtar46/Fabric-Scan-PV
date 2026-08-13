@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "exceljs": "^4.4.0",
     "framer-motion": "^12.42.2",
     "googleapis": "^173.0.0",
     "html5-qrcode": "^2.3.8",
